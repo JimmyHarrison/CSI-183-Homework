@@ -1,0 +1,68 @@
+View(data)
+
+#QUESTION 1 - Find the dorm with the most bike thefts---------------------------------------------------------------
+
+#array of the dorms
+dorms=c("Casa","Swig","Nobili","Graham","Walsh","Dunne","Sanfilippo","Campisi","Sobrato","Bellarmine","McLaughlin")
+#count array for the dorms bike thefts, starting at 0
+countD=c(0,0,0,0,0,0,0,0,0,0,0)
+
+for(i in 1:11){
+  subset<-data[grep(dorms[i],data$LOCATION),]
+  countD[i]=nrow(subset)
+}
+max(countD)
+#ANSWER: Swig has 23 bike thefts, which is more than any other dorm
+
+
+#QUESTION 2 - Find the worst day of the week-----------------------------------------------------------------------
+#Days of the week
+daysOfWeek=c("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
+#Count array for each day of the week, each starts with 0
+count<-c(0,0,0,0,0,0,0)
+
+#find the day of the week it was on using weekdays() and then add one to the count array for the correct day
+data[2,1]
+for(i in 1:(nrow(data))){
+  if(nchar(as.character(data[i,2]))<10 & is.na(as.character(data[i,2]))==FALSE){
+  date=weekdays(as.Date(as.character(data[i,2]),'%m/%d/%Y'))
+    for(j in 1:7){
+      if(date==daysOfWeek[j]){
+        count[j]=count[j]+1
+      }
+    }
+  }
+}
+max(count)
+#--ANSWER: Monday has the most bike thefts at 37
+
+
+#QUESTION 3 - Find the worst month---------------------------------------------------------------------------------
+
+#finds the month of the date from the data (take in "3/12/2014" outputs 3)
+findMonth<-function(x){
+  for(i in 1:nchar(x))
+    if(substr(x,i,i)=="/"){
+      return(substr(x,1,i-1))
+    }
+}
+
+#array of the months 1-2 (Jan=1, Dec=12)
+Months=c("1","2","3","4","5","6","7","8","9","10","11","12")
+#array of the months bike theft counts. Each month starts with 0 thefts
+countM<-c(0,0,0,0,0,0,0,0,0,0,0,0)
+
+#find the month of the row in data using findMonth, add 1 to whichever month it is in the countM array
+for(i in 1:(nrow(data))){
+  if(is.na(as.character(data[i,2]))==FALSE){
+    Month=findMonth(as.character(data[i,2]))
+    print(Month)
+    for(j in 1:12){
+      if(Month==Months[j]){
+        countM[j]=countM[j]+1
+      }
+    }
+  }
+}
+max(countM)
+#--ANSWER: February has the most bike thefts at 31
